@@ -1,0 +1,14 @@
+{
+  "name": "testmypromise",
+  "version": "1.0.0",
+  "description": "",
+  "main": "after.js",
+  "scripts": {
+    "test": "promises-aplus-tests for-promises-aplus-tests.js"
+  },
+  "author": "leibin04",
+  "license": "ISC",
+  "devDependencies": {
+    "promises-aplus-tests": "^2.1.2"
+  }
+}
