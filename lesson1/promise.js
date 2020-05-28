@@ -1,12 +1,17 @@
-// 手写promise
+/**
+ * 手写promise记录
+ *
+ * @file promise.js
+ * @author binlabs00@gmail.com
+ * @description 参考https://promisesaplus.com/ Promises/ A+ 规范
+ */
+
 
 
 const RESOLVED = 'RESOLVED';
 const REJECTED = 'REJECTED';
 const PENDING = 'PENDING';
 
-
-// resolvePromise s所有的promise都要
 function resolvePromise(promise, x, resolve, reject) {
     // 循环使用，不允许自己等待自己完成的错误实现
     if (promise === x) {
@@ -48,7 +53,7 @@ function resolvePromise(promise, x, resolve, reject) {
             reject(e);
         }
     }
-    // 一个普通值 value  比如 123
+    // 一个普通值 value  比如 123 undefined {} 数组等没可以看
     else {
         resolve(x);
     }
@@ -65,17 +70,6 @@ class Promise {
         this.onResolvedCallbacks = [];
         this.onRejectedCallbacks = [];
 
-        const resolve = data => {
-            // 确定状态变化，从 PENDING => RESOLVED
-            if (this.state === PENDING) {
-                this.value = data;
-                this.state = RESOLVED;
-
-                // 当resolve时，将所有的成功的回调onFulfiled都执行一遍
-                this.onResolvedCallbacks.forEach(fn => fn());
-            }
-        };
-
         const reject = reason => {
             // 确定状态变化，从 PENDING => REJECTED
             if (this.state === PENDING) {
@@ -84,6 +78,23 @@ class Promise {
                 // 当rejected时，将所有的失败的回调onRejected都执行一遍
 
                 this.onRejectedCallbacks.forEach(fn => fn());
+            }
+        };
+
+        const resolve = data => {
+
+            // 递归解析 ，直到获得一个普通值
+            if (data instanceof Promise) {
+                return data.then(resolve, reject);
+            }
+
+            // 确定状态变化，从 PENDING => RESOLVED
+            if (this.state === PENDING) {
+                this.value = data;
+                this.state = RESOLVED;
+
+                // 当resolve时，将所有的成功的回调onFulfiled都执行一遍
+                this.onResolvedCallbacks.forEach(fn => fn());
             }
         };
 
@@ -171,7 +182,54 @@ class Promise {
         return promise2;
     }
 
+
+    catch(errcb) {
+        // 利用已有的promise实例，只不过一个onFulfiled 参数为空then方法，还可以继续返回值 供下面的then处理
+        return this.then(null, errcb);
+    }
+
+    // 不管上一个then十成功还是失败，都会进入finally，执行一个处理逻辑，但是该处理逻辑的返回值不会继续乡下传递，而是传递finally接受到的返回值给下一个then，
+    finally(callback) {
+        return this.then(
+            value => Promise.resolve(callback()).then(() => value),
+            reason => Promise.resolve(callback()).then(() => {
+                throw reason;
+            }));
+    }
+
+    // 返回一个新的resolved的promise
+    static resolve(data) {
+        return new Promise((resolve, reject) => {
+            resolve(data);
+        });
+    }
+
+    // 返回一个新的rejected的promise
+    static reject(reason) {
+        return new Promise((resolve, reject) => {
+            reject(reason);
+        });
+    }
+
+
 }
+
+
+// Promise.resolve(new Promise((res, rej) => {
+//     setTimeout(() => {
+//         rej('ok');
+//     }, 100);
+// })).finally(value => {
+//     console.log('finally');
+//     return 'lllok';
+// }).catch(err => {
+//     console.log('err', err);
+//     return  'received err' + err;
+// }).then(val => {
+//     console.log('val', val);
+// }, reason => {
+//     console.log('reason', reason);
+// });
 
 
 module.exports = Promise;
