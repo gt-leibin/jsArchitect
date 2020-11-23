@@ -12,6 +12,14 @@ const RESOLVED = 'RESOLVED';
 const REJECTED = 'REJECTED';
 const PENDING = 'PENDING';
 
+
+/**
+ * 
+ * @param {*} promise promise实例
+ * @param {*} x onResolved 或者onRejected 的返回值
+ * @param {*} resolve promise构造函数中的成功处理函数
+ * @param {*} reject promise构造函数中的失败处理函数
+ */
 function resolvePromise(promise, x, resolve, reject) {
     // 循环使用，不允许自己等待自己完成的错误实现
     if (promise === x) {

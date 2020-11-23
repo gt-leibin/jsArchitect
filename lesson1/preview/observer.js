@@ -8,7 +8,7 @@
 
 
 
-class  Subject {
+class Subject {
     constructor (name) {
         this.name = name;
         this.state = '开心';
@@ -35,7 +35,6 @@ class Observer {
     }
 }
 
-
 const baby1 = new Subject('宝宝1');
 const baby2 = new Subject('宝宝2');
 
@@ -49,3 +48,4 @@ baby2.attach(ma);
 
 baby1.setState('拉便便');
 baby2.setState('尿尿');
+

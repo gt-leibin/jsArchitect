@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <!-- // 表单格式不会跨域！ 只有post get 两种方法 -->
+    <!-- 没有跨域 有安全隐患 任何人都可以访问我的服务器 ，一般放一个隐藏input hidden form 校验 -->
+    <!-- 只有三种type application/url_encoding -->
+    <!-- 跨域不允许携带cookie -->
+    <!-- 发送请求 双方各自设置 headers 来沟通 -->
+
+    <!-- 自定义了任何一个请求头，就会变成复杂请求，会发送options 预检请求，options请求也有自己的缓存机制 连续发送请求，不一定每次都发 -->
+    <form action="post">
+        <input type="text" name="aa">
+        <input type="text" name="bb">
+        <button id="btn">提交</button>
+    </form>
+    <script>
+        // ajax 四步骤  创建 xhr 开启请求  发送请求，监听状态变化
+        // 为什么file 协议 提交请求 没提示跨域？
+        const btn = document.getElementById('btn');
+        btn.addEventListener('click', e => {
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', 'http://localhost/reg', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.responseType = 'json';
+            xhr.onload = function() {
+                console.log(xhr.response);
+            }
+            xhr.send(JSON.stringify({aa: 'bbb'}));
+        });
+        
+
+    </script>
+
+</body>
+</html>

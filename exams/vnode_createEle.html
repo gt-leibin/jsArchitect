@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #root {
+            width: 100%;
+            height: 400px;
+        }
+
+        #container {
+            width: 100%;
+            height: 50vw;
+            border: 1px solid #5c5c5c
+        }
+
+        #container1 {
+            width: 100%;
+            height: 50vw;
+            border: 1px solid #5c5c5c
+        }
+
+        #move, #move1 {
+            width: 10px;
+            height: 10px;
+            background-color: red;
+        }
+
+
+    </style>
+</head>
+
+<body>
+    <h3>创建vnode</h3>
+    <div id="root">
+        <div id="container">
+            container
+            <div  draggable="true" id="move">move</div>
+        </div>
+
+        <div id="container1"  draggable="true">
+            container1
+            <div  draggable="true" id="move1">move1</div>
+        </div>
+    </div>
+
+</body>
+<script >
+    const con = document.querySelector('#container');
+    const con1 = document.querySelector('#container1');
+    const move = document.querySelector('#move');
+
+    let startPointX = 0;
+    let startPointY = 0;
+    let endPointX = 0;
+    let endPointY = 0;
+    
+    let dragEle = null;
+
+  
+
+    document.addEventListener('dragstart', e => {
+        console.log('dragstart', e);
+        dragEle = e.target;
+        e.target.style.opacity = .5;
+
+    });
+    document.addEventListener('dragend', e => {
+        // e.target.style.opacity = "";
+        console.log('dragend', e);
+    });
+
+
+    document.addEventListener('dragenter', e => {
+        e.target.style.opacity = "#2e2e2e";
+        console.log('dragenter', e);
+    });
+
+    document.addEventListener('dragover', e => {
+        e.preventDefault();
+        // console.log('dragover', e);
+    })
+
+    document.addEventListener('drop', e => {
+        e.preventDefault();
+        e.target.style.opacity = "";
+        console.log('drop', e);
+        dragEle.parentNode.removeChild(dragEle);
+        e.target.appendChild(dragEle);
+    });
+
+
+
+
+
+</script>
+
+
+<script>
+  
+
+    // VNode类
+    // class VNode {
+    //     constructor(tag, data, ch, text, elm) {
+    //         this.tag = tag || '';
+    //         this.data = data || {};
+    //         this.children = ch;
+    //         this.text = text;
+    //         this.key = data.key || '';
+    //         this.elm = elm || null;
+    //     }
+    //     render() {
+    //         function createEle(vnode) {
+    //             // vnode 不是文本元素, 就是一个带有tag或者children的节点
+    //             if (vnode.tag) {
+    //                 let ele = vnode.ele = document.createElement(vnode.tag);
+    //                 if (vnode.children) {
+    //                     vnode.children.forEach(child => {
+    //                         ele.appendChild(createEle(child));
+    //                     });
+    //                 }
+    //                 else {
+    //                     ele.appendChild(document.createTextNode(vnode.text));
+    //                 }
+    //             }
+    //             else {
+    //                 return document.createTextNode(vnode);
+    //             }
+    //             return vnode.ele;
+    //         }
+
+    //         return createEle(this);
+
+    //     }
+    // }
+
+    // 创建vnode函数  将文本元素转化成vnode
+    // function createVnode(tag, data, ch) {
+
+    //     var text, children;
+    //     if (ch) {
+    //         // 考虑子节点是文本
+    //         if (typeof ch === 'string') {
+    //             text = ch;
+    //         } else {
+    //             children = ch;
+    //         }
+    //     }
+
+    //     if (children && children.length) {
+    //         for (var i = 0; i < children.length - 1; i++) {
+    //             if (typeof children[i] === 'string') {
+    //                 // 把子节点全部转为vnode
+    //                 children[i] = new VNode(undefined, undefined, undefined, children[i]);
+    //             }
+    //         }
+    //     }
+
+    //     return new VNode(tag, data, children, text);
+    // }
+
+
+    
+
+    // const vnodes = createVnode('ul', {
+    //     'class': 'pp'
+    // }, [
+    //     createVnode('ol', {
+    //         id: 'bb'
+    //     }, ['text1']),
+    //     createVnode('ol', {
+    //         id: 'cc'
+    //     }, ['text2'])
+    // ]);
+
+    // console.log(vnodes.render());
+</script>
+
+</html>
