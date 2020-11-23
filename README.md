@@ -1,2 +1,2 @@
 # jsArchitect
-I want a deep understanding to js
+a deep understanding to Front-end architecture
